@@ -80,7 +80,3 @@ The file-system / directory structure should be followed for making import state
         - EncryptionDecryption
             - Encryption
             - Decryption
-
-## Feedback 
-
-Raise an issue if you 
