@@ -1,5 +1,5 @@
 # PiedPiper
 A Data Compression and Data Encryption Organization
 
-![Logo](https://ih1.redbubble.net/image.214722250.4447/flat,1000x1000,075,f.u2.jpg)  
+![Logo](https://ih1.redbubble.net/image.447815602.2953/raf,360x360,075,t,fafafa:ca443f4786.jpg)  
 
