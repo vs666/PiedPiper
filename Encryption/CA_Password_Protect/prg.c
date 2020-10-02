@@ -17,15 +17,17 @@
 const long long int MULT_NUM = (long long int)1000000007;
 const long long int ADD_NUM = (long long int)1029831027;
 const long long int MOD = (long long int)0xFF;
-const int COLUMN_SIZE = 1000000;
+int column_size = 100 * 1024 * 1024 / 8;
 const int RULE = 150;
-
 int row_size = 1;
-int key;
-
-void initMain(int keyVal)
+char **hasharray;
+int c_x = 0, c_y = 0;
+void initMain(char *pswd, int len)
 {
-    key = keyVal;
+    row_size = max(len, strlen(pswd));
+    column_size = column_size / row_size;
+    hasharray = (char *)malloc(column_size * sizeof(char *));
+    hasharray = initPrg(pswd);
 }
 
 char conversion(char **base, int x, int y)
@@ -57,12 +59,23 @@ char conversion(char **base, int x, int y)
     return bit_seq;
 }
 
+/**
+ *  prevents dictionary attacks by removing character bias
+ *  NOTE : Check for uniqueness of passwords or rate of hash collisions 
+*/
 char **removeBias(char *ar)
 {
-    char arr[COLUMN_SIZE][row_size];
+    char arr[column_size][row_size];
     for (int x = 0; x < row_size; x++)
     {
-        arr[0][x] = (ar[x] * MULT_NUM + ADD_NUM) % MOD;
+        if (x == 0)
+        {
+            arr[0][x] = (ar[x] * MULT_NUM + ADD_NUM) % MOD;
+        }
+        else
+        {
+            arr[0][x] = ((ar[x] * MULT_NUM + ADD_NUM) ^ arr[0][x - 1]) % MOD;
+        }
     }
     return arr;
 }
@@ -71,7 +84,7 @@ char **initPrg(char *pswd)
 {
     row_size = max(row_size, strlen(pswd));
     char **base = removeBias(pswd);
-    for (int x = 1; x < COLUMN_SIZE; x++)
+    for (int x = 1; x < column_size + 1; x++)
     {
         for (int y = 0; y < row_size; y++)
         {
@@ -87,7 +100,26 @@ char **initPrg(char *pswd, int row)
     return initPrg(pswd);
 }
 
-int getNum()
+char getNum()
 {
-    // generate number from the grid generated
+    char val = 0;
+    for (int x = 0; x < 8; x++)
+    {
+        val = val | (((hasharray[x + c_x][c_y / 8] & (1 << (c_y % 8))) != 0) << x);
+    }
+    return val;
+    c_x += 8;
+    if (c_x >= column_size)
+    {
+        // x-overflow of grid
+        c_x = 0;
+        c_y++;
+    }
+    if (c_y >= row_size)
+    {
+        // reinitialization of the grid
+        hasharray = initPrg(hasharray[column_size]);
+        c_x = 0;
+        c_y = 0;
+    }
 }
