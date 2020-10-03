@@ -22,6 +22,7 @@ const int RULE = 150;
 int row_size = 1;
 char **hasharray;
 int c_x = 0, c_y = 0;
+
 void initMain(char *pswd, int len)
 {
     row_size = max(len, strlen(pswd));
@@ -92,12 +93,6 @@ char **initPrg(char *pswd)
         }
     }
     return base;
-}
-
-char **initPrg(char *pswd, int row)
-{
-    row_size = row;
-    return initPrg(pswd);
 }
 
 char getNum()
