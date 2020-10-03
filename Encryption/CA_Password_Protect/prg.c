@@ -4,7 +4,7 @@
  * This method is space inefficient, but has more application in image compression than data compression
  * 
  * Created By : Varul Srivastava
- * Reviewed by : 
+ * Reviewed by : Ashwin Mittal
  * 
  * This algorithm uses Wolfram's Rule of Cellular Automaton
 */
