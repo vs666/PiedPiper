@@ -5,7 +5,6 @@ void initMain(int keyVal);
 char conversion(char **base, int x, int y);
 char **removeBias(char *ar);
 char **initPrg(char *pswd);
-char ** initPrg(char *pswd, int row_size);
 int getNum();
 
 
