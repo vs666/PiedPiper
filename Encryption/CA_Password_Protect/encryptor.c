@@ -10,9 +10,11 @@
 
 #include "prg.h"
 #include "encryptor.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 /* Returns 1 in case of errors, otherwise returns 0 */
-int encryptor(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     /* 
     argv[1] is filename
@@ -38,8 +40,11 @@ int encryptor(int argc, char *argv[])
         return 1;
     }
 
-    argc == 3 ? initMain(argv[2], strlen(argv[2]))
+    // SEGMENTATION FAULT ON THIS LINE
+
+    argc <= 3 ? initMain(argv[2], strlen(argv[2]))
               : initMain(argv[2], atoi(argv[3]));
+
 
     char s[1005], e[1005] = "_encrypted";
 
@@ -75,7 +80,6 @@ int encryptor(int argc, char *argv[])
         perror(s);
         return 1;
     }
-
     long long SIZE = lseek(fd_in, 0, SEEK_END);
 
     long long BUFFER_SIZE = 1000000,
