@@ -1,16 +1,16 @@
-# Password based encryption algorithm
+# Password-based encryption/decryption algorithm
 
-This folder contains password based encryption algorithm, in which we can encrypt a file based on a password that can be of varying length (1 character to 100MB of characters)
+This folder contains a password-based encryption algorithm, in which we can encrypt a file based on a password that can be of varying length (1 character to 100MB of characters)
 
 _______________________________
 
 ## USAGE
 
-To compile the code use makefile:
+To compile the code, use makefile:
 ```bash
 $ make
 ```
-To run the code :
+To run the code (encrypt):
 ```bash
 $ ls
 . .. loremipsum.txt encrypt
@@ -18,7 +18,15 @@ $ ./encrypt <filename> [PASSWORD] (x-width of stream)
 $ ls
 . .. loremipsum.txt loremipsum_encrypted.txt encrypt
 ```
-The x-length of the stream will decide the number of columns in the encryption matrix.
+To decrypt the encrypted file:
+```bash
+$ ls
+. .. loremipsum.txt loremipsum_encrypted.txt encrypt
+$ ./encrypt <encrypted_filename> [PASSWORD] (x-width of stream)
+$ ls
+. .. loremipsum.txt loremipsum_encrypted.txt loremipsum_decrypted.txt encrypt
+```
+The x-length of the stream will decide the number of columns in the encryption matrix. For decryption, the user is required to use the same password and x-length as used during encryption. 
 
 ## Analysis 
 
@@ -38,7 +46,7 @@ Results for loremipsum.txt:
 
 _________________________
 
-## Created by :
+## Created by:
 
 1. Ashwin Mittal
 - encryptor.c 

@@ -3,8 +3,8 @@
  * which takes a file as input, encrypts/decrypts it using standard Wolfram CA under the hood, 
  * and produces an output file (same extension).
  * 
- * Created By : Ashwin Mittal
- * Reviewed by :
+ * Created By: Ashwin Mittal
+ * Reviewed by: Ashwin Mittal
  * 
 */
 
@@ -26,8 +26,7 @@ int main(int argc, char *argv[])
 
     if (argc < 3 || argc > 4)
     {
-        /* yet to be added */
-        char error[] = "Usage: \n";
+        char error[] = "Usage: ./encrypt <filename> [PASSWORD] (x-width of stream)\n";
 
         write(2, error, strlen(error));
         return 1;
@@ -45,7 +44,6 @@ int main(int argc, char *argv[])
     argc <= 3 ? initMain(argv[2], strlen(argv[2]))
               : initMain(argv[2], atoi(argv[3]));
 
-
     char s[1005], e[1005] = "_encrypted";
 
     long long i, j, n = strlen(argv[1]);
@@ -58,11 +56,20 @@ int main(int argc, char *argv[])
         }
     }
 
-    strncpy(s, argv[1], i);
+    if (i >= strlen(e) && strncmp(&argv[1][i - strlen(e)], e, strlen(e)) == 0)
+    {
+        strcpy(s, argv[1]);
+        s[i - strlen(e) + 1] = 'd';
+        s[i - strlen(e) + 2] = 'e';
+    }
+    else
+    {
+        strncpy(s, argv[1], i);
 
-    strcpy(&e[strlen(e)], &argv[1][i]);
+        strcpy(&e[strlen(e)], &argv[1][i]);
 
-    strcpy(&s[i], e);
+        strcpy(&s[i], e);
+    }
 
     int fd_in = open(argv[1], O_RDONLY);
 

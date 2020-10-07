@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 
 plt.rcParams.update({'font.size': 12})
-file_name = input("Enter file name : ")
+file_name = input("Enter file name: ")
 
 fileob = open(file_name,'rb')
 

@@ -1,4 +1,4 @@
-encrypt : \
+encrypt: \
 				prg.o \
 				util.o \
 				encryptor.h \
@@ -7,8 +7,8 @@ encrypt : \
 	gcc -o encrypt $^
 	rm -f *.o
 
-util.o : util.h 
+util.o: util.h 
 	gcc -g -c util.c
 
-prg.o : prg.h util.o
+prg.o: prg.h util.o
 	gcc -g -c prg.c 

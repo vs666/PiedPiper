@@ -3,8 +3,8 @@
  * Code is to be include as libraru in the naive encryption/decryption algorithm
  * This method is space inefficient, but has more application in image compression than data compression
  * 
- * Created By : Varul Srivastava
- * Reviewed by : Varul Srivastava
+ * Created By: Varul Srivastava
+ * Reviewed by: Varul Srivastava
  * 
  * This algorithm uses Wolfram's Rule of Cellular Automaton
 */
@@ -61,7 +61,6 @@ unsigned char conversion(int x, int y)
         {
             num += (hasharray[x][y] & (1 << (a + 1))) != 0 ? 4 : 0;
         }
-        // printf("NUM :: %d\n", num);
         bit_seq += (RULE & (1 << num)) != 0 ? (1 << a) : 0;
     }
     return bit_seq;
@@ -104,7 +103,6 @@ unsigned char **initPrg(unsigned char *pswd)
 
 unsigned char getNum()
 {
-
     unsigned char val = 0;
     for (int x = 0; x < 8; x++)
     {
