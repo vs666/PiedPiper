@@ -19,7 +19,7 @@ const long long int MULT_NUM = (long long int)1092342049;
 const long long int ADD_NUM = (long long int)133942323;
 const long long int MOD = (long long int)256;
 int column_size = 100 * 1024 * 1024 / 8;
-const int RULE = 30;
+const int RULE = 150;
 int row_size = 1;
 unsigned char **hasharray;
 int c_x = 0, c_y = 0;
