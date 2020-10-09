@@ -214,7 +214,7 @@ int bwt(int argc, char *argv[])
     }
     int en = 0;
     struct bwt key;
-    long long BUFFER_SIZE = 1000000;
+    long long BUFFER_SIZE = 100000;
     if (i >= strlen(e) && strncmp(&argv[1][i - strlen(e)], e, strlen(e)) == 0)
     {
         en = 1;
