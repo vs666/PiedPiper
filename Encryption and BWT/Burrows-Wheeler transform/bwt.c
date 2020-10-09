@@ -187,7 +187,7 @@ void decoder(int key, int n, char *s)
     s = s_new;
 }
 
-int main(int argc, char *argv[])
+int bwt(int argc, char *argv[])
 {
     struct stat stats;
 
