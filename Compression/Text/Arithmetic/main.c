@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         fprintf(stderr,"Usage: ./compress <path_of_file>\n");
         return 1;
     }
-    if (strcmp(argv[1],"-help") == 0 || strcmp(argv[1],"-h") == 0)
+    if (strcmp(argv[1],"--help") == 0 || strcmp(argv[1],"-h") == 0)
         return help();
     
     encode(argc, argv);
