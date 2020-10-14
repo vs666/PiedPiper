@@ -5,4 +5,4 @@
 2. `./compress <path_of_file>`
 
 ## Features
-1. `-help` or `-h` for help.
+1. `--help` or `-h` for help.
