@@ -52,7 +52,8 @@ void heapifyTopToBottom(int indx)
 
 	if(rightChild == NULL)
 	{
-		if(isSmallerNode(leftChild, currentNode) == true){
+		if(isSmallerNode(leftChild, currentNode) == true)
+		{
 			minHeap[indx] = leftChild;
 			minHeap[2*indx] = currentNode;
 			heapifyTopToBottom(2*indx);

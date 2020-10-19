@@ -41,7 +41,8 @@ void formCodes(Node* node, char* code)
 	#include<stdio.h>
 	if(node == NULL)
 		return;
-	if(node -> isLeafNode == true){
+	if(node -> isLeafNode == true)
+	{
 		Code* codeNode = newCode(node->c, code);
 		codes[((int)(codeNode->c) + 256) % 256] = codeNode;
 		return;
@@ -55,9 +56,9 @@ void formCodes(Node* node, char* code)
 		sprintf(rightChildCode, "%s1", code);
 		sprintf(leftChildCode, "%s0", code);
 		formCodes(node->leftChild, leftChildCode);
-		// free(leftChildCode);
+		free(leftChildCode);
 		formCodes(node->rightChild, rightChildCode);
-		// free(rightChildCode);
+		free(rightChildCode);
 	}
 	return ;
 
