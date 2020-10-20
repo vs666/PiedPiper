@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 	printf("Input file given: %s\n\n", inputPath);
-	printf("Reading from input file.\n");
+	printf("Reading header from input file.\n");
 
 	codeSearchTreeNode* headNodePointer = newCodeTreeNode('@', false);
 
@@ -61,8 +61,6 @@ int main(int argc, char* argv[])
 	fread(&countOfCodes, sizeof(int), 1, inputFile);
 	fread(&countOfBitsToIgnore, sizeof(int), 1, inputFile);
 
-	printf("Reading %lld characters, %d Nodes and %d bits are to be ignored\n", countCharsToBeRead, countOfCodes, countOfBitsToIgnore);
-
 	Code* tempCode = newCode('@', "@");
 
 	for(int codeCount=0; codeCount<countOfCodes; codeCount++)
@@ -70,7 +68,6 @@ int main(int argc, char* argv[])
 		readCode(tempCode, inputFile);
 		insertCodeNode(headNodePointer, tempCode, 0, strlen(tempCode->code));
 	}
-	printf("Codes read!\n");
 	codeSearchTreeNode* movingPointer = headNodePointer;
 
 	FILE *outputFile;
@@ -83,6 +80,8 @@ int main(int argc, char* argv[])
 	}
 
 	char charRead;
+
+	printf("Writing out to output file...\n");
 
 	for(long long charsRead=0; charsRead<(countCharsToBeRead-1); charsRead++)
 	{
@@ -109,7 +108,6 @@ int main(int argc, char* argv[])
 			if(movingPointer->aValidCharacter == true)
 			{
 				fprintf(outputFile, "%c", movingPointer->c);
-				// printf("Read %c\n", movingPointer->c);
 				movingPointer = headNodePointer;
 			}
 		}
@@ -121,10 +119,6 @@ int main(int argc, char* argv[])
 	{
 		bits[position] = intOfChar % 2;
 		intOfChar /= 2;
-	}
-	for(int i=0; i<8; i++)
-	{
-		printf("%d", bits[i]);
 	}
 	for(int position=0; position < 8-countOfBitsToIgnore; position++)
 	{
@@ -146,6 +140,10 @@ int main(int argc, char* argv[])
 
 	fclose(inputFile);
 	fclose(outputFile);
+
+	printf("File succesfully decompressed!\n");
+	printf("Output file: %s\n", outputPath);
+	printf("Good Bye\n");
 
 	return 0;
 }

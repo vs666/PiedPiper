@@ -147,10 +147,12 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
+
+			printf("Writing out file header...\n");
+
 			fwrite(&countCharsToBeRead, sizeof(long long), 1, outputFile);
 			fwrite(&countOfCodes, sizeof(int), 1, outputFile);
 			fwrite(&countOfBitsToIgnore, sizeof(int), 1, outputFile);
-			printf("Writing %lld characters, %d Nodes and %d bits are to be ignored\n", countCharsToBeRead, countOfCodes, countOfBitsToIgnore);
 			for(int i=0; i<256; i++)
 			{
 				if(codes[i] != NULL)
@@ -168,6 +170,7 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
+				printf("Writing out compressed file...\n");
 				c = fgetc(inputFile);
 				while( c != EOF )
 				{
