@@ -45,6 +45,8 @@ Code* codes[270];
 
 void writeBitToOutputFile(int, FILE*);
 
+void writeCode(Code*, FILE*);
 
+void readCode(Code*, FILE*);
 
 #endif

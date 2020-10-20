@@ -106,6 +106,11 @@ int main(int argc, char* argv[])
 
 		fclose(inputFile);
 
+		for(int i=0; i<256; i++)
+		{
+			codes[i] = NULL;
+		}
+
 		Node* head = minHeap[1];
 		char startCode[] = "";
 		formCodes(head, startCode);
@@ -123,15 +128,17 @@ int main(int argc, char* argv[])
 				countOfCodes++;
 				countCharsToBeRead += (charFrequencies[i] * (long long)strlen(codes[i]->code));
 				countOfExcessBits += (charFrequencies[i] * (long long)strlen(codes[i]->code));
-				countOfExcessBits %= 8;
+				countOfExcessBits %= 8LL;
 			}
 		}
+
 		
-		int countOfBitsToIgnore = 8 - countOfExcessBits;
+		int countOfBitsToIgnore = 8 - (int)countOfExcessBits;
+		countCharsToBeRead = (countCharsToBeRead + countOfBitsToIgnore) / 8LL;
 
 		FILE *outputFile;
 
-		outputFile = fopen(outputPath, "wb+");
+		outputFile = fopen(outputPath, "wb");
 
 		if(outputFile == NULL)
 		{
@@ -142,12 +149,13 @@ int main(int argc, char* argv[])
 		{
 			fwrite(&countCharsToBeRead, sizeof(long long), 1, outputFile);
 			fwrite(&countOfCodes, sizeof(int), 1, outputFile);
-			fwrite(&countOfBitsToIgnore, sizeof(long long), 1, outputFile);
+			fwrite(&countOfBitsToIgnore, sizeof(int), 1, outputFile);
+			printf("Writing %lld characters, %d Nodes and %d bits are to be ignored\n", countCharsToBeRead, countOfCodes, countOfBitsToIgnore);
 			for(int i=0; i<256; i++)
 			{
 				if(codes[i] != NULL)
 				{
-					fwrite(codes[i], sizeof(Code), 1, outputFile);
+					writeCode(codes[i], outputFile);
 				}
 			}
 
@@ -167,7 +175,7 @@ int main(int argc, char* argv[])
 					for(int i=0; i<codeLength; i++)
 					{
 						char bit = codes[charToInt(c)]->code[i];
-						if(bit == 1)
+						if(bit == '1')
 							writeBitToOutputFile(1, outputFile);
 						else
 							writeBitToOutputFile(0, outputFile);

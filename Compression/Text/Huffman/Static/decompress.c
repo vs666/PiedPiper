@@ -55,21 +55,19 @@ int main(int argc, char* argv[])
 
 	codeSearchTreeNode* headNodePointer = newCodeTreeNode('@', false);
 
-	long long countCharsToBeRead, countOfBitsToIgnore;
-	int countOfCodes;
+	long long countCharsToBeRead;
+	int countOfCodes, countOfBitsToIgnore;
 	fread(&countCharsToBeRead, sizeof(long long), 1, inputFile);
 	fread(&countOfCodes, sizeof(int), 1, inputFile);
-	fread(&countOfBitsToIgnore, sizeof(long long), 1, inputFile);
+	fread(&countOfBitsToIgnore, sizeof(int), 1, inputFile);
 
-	printf("Parameters read.\nNumber of codes = %d\n", countOfCodes);
+	printf("Reading %lld characters, %d Nodes and %d bits are to be ignored\n", countCharsToBeRead, countOfCodes, countOfBitsToIgnore);
 
 	Code* tempCode = newCode('@', "@");
 
 	for(int codeCount=0; codeCount<countOfCodes; codeCount++)
 	{
-		fread(tempCode, sizeof(Code), 1, inputFile);
-		printf("Calling %d, %s\n", charToInt(tempCode->c), tempCode->code);
-		printf("%d codes read.\n", codeCount);
+		readCode(tempCode, inputFile);
 		insertCodeNode(headNodePointer, tempCode, 0, strlen(tempCode->code));
 	}
 	printf("Codes read!\n");
@@ -88,7 +86,7 @@ int main(int argc, char* argv[])
 
 	for(long long charsRead=0; charsRead<(countCharsToBeRead-1); charsRead++)
 	{
-		charRead = fgetc(inputFile);
+		fread(&charRead, sizeof(char), 1, inputFile);
 		int intOfChar = charToInt(charRead);
 		int bits[8];
 		for(int position=7; position>=0; position--)
@@ -99,6 +97,7 @@ int main(int argc, char* argv[])
 		for(int position=0; position<8; position++)
 		{
 			int bit = bits[position];
+			// printf("Read %d bit\n", bit);
 			if(bit == 0)
 			{
 				movingPointer = movingPointer->leftChild;
@@ -110,11 +109,12 @@ int main(int argc, char* argv[])
 			if(movingPointer->aValidCharacter == true)
 			{
 				fprintf(outputFile, "%c", movingPointer->c);
+				// printf("Read %c\n", movingPointer->c);
 				movingPointer = headNodePointer;
 			}
 		}
 	}
-	charRead = fgetc(inputFile);
+	fread(&charRead, sizeof(char), 1, inputFile);
 	int intOfChar = charToInt(charRead);
 	int bits[8];
 	for(int position=7; position>=0; position--)
@@ -122,7 +122,10 @@ int main(int argc, char* argv[])
 		bits[position] = intOfChar % 2;
 		intOfChar /= 2;
 	}
-
+	for(int i=0; i<8; i++)
+	{
+		printf("%d", bits[i]);
+	}
 	for(int position=0; position < 8-countOfBitsToIgnore; position++)
 	{
 		int bit = bits[position];

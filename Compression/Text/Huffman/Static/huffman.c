@@ -76,22 +76,46 @@ codeSearchTreeNode* newCodeTreeNode(char chararcter, bool isValid)
 
 void writeBitToOutputFile(int bit, FILE* file)
 {
-	static char dataToBeWritten = (char)0;
-	static int bitsInData = 0;
+	static int dataToBeWritten;
+	static int bitsInData;
 
 	dataToBeWritten = dataToBeWritten << 1;
 	bitsInData++;
 
 	if(bit == 1)
 	{
-		dataToBeWritten = dataToBeWritten | (char)1;
+		dataToBeWritten = dataToBeWritten | 1;
 	}
 
 	if(bitsInData == 8)
 	{
-		fwrite(&dataToBeWritten, sizeof(char), 1, file);
-		dataToBeWritten = (char)0;
+		char data = (char)dataToBeWritten;
+		fwrite(&data, sizeof(char), 1, file);
+		dataToBeWritten = 0;
 		bitsInData = 0;
 	}
 
+}
+
+void writeCode(Code* sourceCode, FILE* file)
+{
+	char codeLength = (char)strlen(sourceCode->code);
+	char character = sourceCode->c;
+	char *codeString = sourceCode->code;
+	fwrite(&character, sizeof(char), 1, file);
+	fwrite(&codeLength, sizeof(char), 1, file);
+	fwrite(codeString, sizeof(char), charToInt(codeLength), file);
+}
+
+void readCode(Code* destinationCode, FILE* file)
+{
+	char character, codeLength;
+	char* codeString = NULL;
+	fread(&character, sizeof(char), 1, file);
+	fread(&codeLength, sizeof(char), 1, file);
+	codeString = (char*)malloc((1+codeLength)*sizeof(char));
+	fread(codeString, sizeof(char), charToInt(codeLength), file);
+	codeString[charToInt(codeLength)] = '\0';
+	destinationCode->c = character;
+	destinationCode->code = codeString;
 }
