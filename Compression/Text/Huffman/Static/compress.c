@@ -113,18 +113,20 @@ int main(int argc, char* argv[])
 		printf("Generating Output...\n");
 
 		int countOfCodes = 0;
-		int countOfExcessBits = 0;
+		long long countOfExcessBits = 0;
+		long long countCharsToBeRead;
 
 		for(int i=0; i<256; i++)
 		{
 			if(codes[i] != NULL)
 			{
 				countOfCodes++;
-				countOfExcessBits += charFrequencies[i] * strlen(codes[i]->code);
+				countCharsToBeRead += (charFrequencies[i] * (long long)strlen(codes[i]->code));
+				countOfExcessBits += (charFrequencies[i] * (long long)strlen(codes[i]->code));
 				countOfExcessBits %= 8;
 			}
 		}
-
+		
 		int countOfBitsToIgnore = 8 - countOfExcessBits;
 
 		FILE *outputFile;
@@ -138,13 +140,14 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
+			fwrite(&countCharsToBeRead, sizeof(long long), 1, outputFile);
 			fwrite(&countOfCodes, sizeof(int), 1, outputFile);
-			fwrite(&countOfBitsToIgnore, sizeof(int), 1, outputFile);
+			fwrite(&countOfBitsToIgnore, sizeof(long long), 1, outputFile);
 			for(int i=0; i<256; i++)
 			{
 				if(codes[i] != NULL)
 				{
-					// fwrite(codes[i], sizeof(Code), 1, outputFile);
+					fwrite(codes[i], sizeof(Code), 1, outputFile);
 				}
 			}
 
@@ -164,41 +167,19 @@ int main(int argc, char* argv[])
 					for(int i=0; i<codeLength; i++)
 					{
 						char bit = codes[charToInt(c)]->code[i];
-						dataToBeWritten = dataToBeWritten << 1;
-						bitsInData += 1;
-						switch(bit)
-						{
-							case '0':
-							dataToBeWritten = dataToBeWritten | 0;
-							break;
-							case '1':
-							dataToBeWritten = dataToBeWritten | 1;
-							break;
-							default:
-							printf("We ran into some unexpected error!\n");
-							return 1; 
-						}
-						if(bitsInData == 8)
-						{
-							dataBuffer[bufferLength++] = dataToBeWritten;
-							dataBuffer[bufferLength] = '\0';
-							dataToBeWritten = 0;
-							bitsInData = 0;
-						}
-						if(bufferLength == 17){
-							fprintf(outputFile, "%s", dataBuffer);
-							bufferLength = 0;
-						}
+						if(bit == 1)
+							writeBitToOutputFile(1, outputFile);
+						else
+							writeBitToOutputFile(0, outputFile);
 					}
 					c = fgetc(inputFile);
 				}
 				fclose(inputFile);
-				for(int i=0; i<countOfBitsToIgnore; i++){
-					dataToBeWritten = dataToBeWritten << 1;
+
+				for(int i=0; i<countOfBitsToIgnore; i++)
+				{
+					writeBitToOutputFile(0, outputFile);
 				}
-				dataBuffer[bufferLength++] = dataToBeWritten;
-				dataBuffer[bufferLength++] = '\0';
-				fprintf(outputFile, "%s", dataBuffer);
 			}
 			fclose(outputFile);
 		}

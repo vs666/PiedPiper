@@ -6,10 +6,6 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-char dataToBeWritten = 0;
-char dataBuffer[17];
-int bufferLength = 0;
-int bitsInData = 0;
 long long int charFrequencies[256];
 
 typedef struct node
@@ -27,6 +23,14 @@ typedef struct code
 	char* code;
 } Code;
 
+typedef struct codeSearchTreeNode
+{
+	char c;
+	struct codeSearchTreeNode *leftChild;
+	struct codeSearchTreeNode *rightChild;
+	bool aValidCharacter;	
+} codeSearchTreeNode;
+
 Node* newNode(char, long long int, bool);
 
 bool isSmallerNode(Node*, Node*);
@@ -35,6 +39,12 @@ Code* newCode(char, char*);
 
 void formCodes(Node*, char*);
 
+codeSearchTreeNode* newCodeTreeNode(char, bool);
+
 Code* codes[270];
+
+void writeBitToOutputFile(int, FILE*);
+
+
 
 #endif

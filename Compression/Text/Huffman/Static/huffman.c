@@ -63,3 +63,35 @@ void formCodes(Node* node, char* code)
 	return ;
 
 }
+
+codeSearchTreeNode* newCodeTreeNode(char chararcter, bool isValid)
+{
+	codeSearchTreeNode* node = (codeSearchTreeNode*)malloc(sizeof(codeSearchTreeNode));
+	node->c = chararcter;
+	node->aValidCharacter = isValid;
+	node->leftChild = NULL;
+	node->rightChild = NULL;
+	return node;
+}
+
+void writeBitToOutputFile(int bit, FILE* file)
+{
+	static char dataToBeWritten = (char)0;
+	static int bitsInData = 0;
+
+	dataToBeWritten = dataToBeWritten << 1;
+	bitsInData++;
+
+	if(bit == 1)
+	{
+		dataToBeWritten = dataToBeWritten | (char)1;
+	}
+
+	if(bitsInData == 8)
+	{
+		fwrite(&dataToBeWritten, sizeof(char), 1, file);
+		dataToBeWritten = (char)0;
+		bitsInData = 0;
+	}
+
+}
