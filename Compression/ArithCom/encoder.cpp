@@ -83,7 +83,7 @@ void output_bit(ll n)
     bSt <<= 1;
     if (n == 1)
     {
-        bSt &= 1;
+        bSt |= 1;
     }
     genCount++;
     if (genCount == 8)
@@ -151,7 +151,7 @@ int main(int argc, char *argv[])
         obj->update_probability(ch);
     }
     ouf.open(argv[2], ios::in);
-    inf.open("./sam.txt", ios::out);
+    inf.open(argv[1], ios::out);
     obj->initPDF();
     encode(obj);
 
