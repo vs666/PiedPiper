@@ -88,7 +88,7 @@ void output_bit(ll n)
     genCount++;
     if (genCount == 8)
     {
-        cout << (unsigned char)bSt;
+        ouf << (unsigned char)bSt;
         bSt = '\0';
         genCount = 0;
     }
@@ -110,11 +110,11 @@ void encode(ProbabilityDensity *model)
         for (;;)
         {
 
-            if (high < 0x80000000U)
+            if (high < 0x80000000U) //  1000 0000 0000 0000 0000 0000 0000 0000 in binary 
             {
                 output_bit(0);
             }
-            else if (low >= 0x80000000U)
+            else if (low >= 0x80000000U)    //  1000 0000 0000 0000 0000 0000 0000 0000 in binary 
             {
                 output_bit(1);
             }
