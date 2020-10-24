@@ -1,0 +1,28 @@
+An improvement of the original algorithm, due to [Vitter 87], which also includes exten-
+sive analysis is based on the following key ideas:
+1. A different scheme should be used to number the nodes in the dynamic Huffman
+tree. It is called implicit numbering, and it numbers the nodes from the bottom up and
+in each level from left to right.
+2. The Huffman tree should be updated in such a way that the following will always
+be satisfied. For each weight w, all leaves of weight w precede (in the sense of implicit
+numbering) all the internal nodes of the same weight. This is an invariant.
+These ideas result in the following benefits:
+1. In the original algorithm, it is possible that a rearrangement of the tree would
+move a node down one level. In the improved version, this does not happen.
+2. Each time the Huffman tree is updated in the original algorithm, some nodes
+may be moved up. In the improved version, at most one node has to be moved up.
+3. The Huffman tree in the improved version minimizes the sum of distances from
+the root to the leaves and also has the minimum height.
+A special data structure, called a floating tree, is proposed to make it easy to
+maintain the required invariant. It can be shown that this version performs much better
+than the original algorithm. Specifically, if a two-pass Huffman method compresses an
+input file of n symbols to S bits, then the original adaptive Huffman algorithm can
+compress it to at most 2S + n bits, whereas the improved version can compress it down
+to S + n bits—a significant difference! Notice that these results do not depend on the
+size of the alphabet, only on the size n of the data being compressed and on its nature
+(which determines S).
+I think you’re begging the question,” said Haydock, “and I can see looming ahead one
+of those terrible exercises in probability where six men have white hats and six men
+have black hats and you have to work it out by mathematics how likely it is that the
+hats will get mixed up and in what proportion. If you start thinking about things like
+that, you would go round the bend. Let me assure you of that!
