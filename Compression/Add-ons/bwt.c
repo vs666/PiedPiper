@@ -1,6 +1,6 @@
 #include "bwt.h"
 
-#define N 100000
+#define BUFFER_SIZE 100000
 
 struct pair
 {
@@ -74,7 +74,7 @@ void mergesort(struct pair arr[], int l, int r)
 
 void count_sort(int n, int *p, int *c)
 {
-    int cnt[N] = {0}, pair[N] = {0};
+    int cnt[BUFFER_SIZE] = {0}, pair[BUFFER_SIZE] = {0};
     for (int i = 0; i < n; i++)
     {
         cnt[c[i]]++;
@@ -84,7 +84,7 @@ void count_sort(int n, int *p, int *c)
     {
         pair[i] = pair[i - 1] + cnt[i - 1];
     }
-    int p_new[N];
+    int p_new[BUFFER_SIZE];
     for (int i = 0; i < n; i++)
     {
         int x = p[i];
@@ -100,8 +100,8 @@ void count_sort(int n, int *p, int *c)
 
 int encoder(int n, char *s)
 {
-    int c[N], c_new[N], p[N];
-    struct pair a[N];
+    int c[BUFFER_SIZE], c_new[BUFFER_SIZE], p[BUFFER_SIZE];
+    struct pair a[BUFFER_SIZE];
     for (int i = 0; i < n; i++)
     {
         a[i].first = s[i];
@@ -152,7 +152,7 @@ int encoder(int n, char *s)
         }
         k++;
     }
-    char s_new[N];
+    char s_new[BUFFER_SIZE];
     for (int i = 0; i < n; i++)
     {
         s_new[i] = s[(p[i] + n - 1) % n];
@@ -167,14 +167,14 @@ int encoder(int n, char *s)
 void decoder(int key, int n, char *s)
 {
     int start = key;
-    struct pair a[N];
+    struct pair a[BUFFER_SIZE];
     for (int i = 0; i < n; i++)
     {
         a[i].first = s[i];
         a[i].second = i;
     }
     mergesort(a, 0, n - 1);
-    char s_new[N];
+    char s_new[BUFFER_SIZE];
     for (int i = 0; i < n; i++)
     {
         s_new[i] = a[start].first;
@@ -187,7 +187,7 @@ void decoder(int key, int n, char *s)
     s = s_new;
 }
 
-int bwt(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     struct stat stats;
 
@@ -214,7 +214,6 @@ int bwt(int argc, char *argv[])
     }
     int en = 0;
     struct bwt key;
-    long long BUFFER_SIZE = 100000;
     if (i >= strlen(e) && strncmp(&argv[1][i - strlen(e)], e, strlen(e)) == 0)
     {
         en = 1;
