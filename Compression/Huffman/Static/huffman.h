@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-long long int charFrequencies[256];
+extern long long int charFrequencies[256];
 
 typedef struct node
 {
@@ -41,7 +41,7 @@ void formCodes(Node*, char*);
 
 codeSearchTreeNode* newCodeTreeNode(char, bool);
 
-Code* codes[270];
+extern Code* codes[270];
 
 void writeBitToOutputFile(int, FILE*);
 

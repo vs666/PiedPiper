@@ -7,8 +7,8 @@
 
 // The data gets stored starting from index 1
 
-Node* minHeap[257];
-int minHeapSize;
+extern Node* minHeap[257];
+extern int minHeapSize;
 
 Node* getMinimumNode();
 

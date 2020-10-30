@@ -1,5 +1,6 @@
 #include "minHeap.h"
 
+Node* minHeap[257];
 int minHeapSize = 0;
 
 Node* getLeftChild(int indx)

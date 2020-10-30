@@ -1,5 +1,8 @@
 #include "huffman.h"
 
+long long int charFrequencies[256];
+Code* codes[270];
+
 Node* newNode(char _c, long long int _frequency, bool _isLeafNode)
 {
 	Node* node = (Node*) malloc(sizeof(Node));
