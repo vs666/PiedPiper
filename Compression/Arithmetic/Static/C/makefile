@@ -1,13 +1,16 @@
-executable : \
+compress : \
 	filehandler.o \
 	model.o	\
-	decompressor.c
+	compressor.c
 
-	gcc -o executable $^
-	rm -rf *.o 
+	gcc -o compress $^
 
 filehandler.o : filehandler.h filehandler.c 
 	gcc -c -g filehandler.c
 
 model.o : model.h model.c 
 	gcc -c -g model.c
+
+clean:
+	rm -rf *.o 
+

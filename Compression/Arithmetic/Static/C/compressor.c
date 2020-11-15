@@ -74,7 +74,8 @@ void staticCompression(char *source_filename, int permissionsSource, char *dest_
     {
         ul read_size = MIN(rem_size, BUFFER_SIZE);
         char *buff = (char *)malloc(read_size);
-        read(fptr, buff, read_size);
+        printf("r o : %ld\n", read(fptr, buff, read_size));
+
         for (int x = 0; x < read_size; x++)
         {
             insertChar(buff[x]);
@@ -84,7 +85,6 @@ void staticCompression(char *source_filename, int permissionsSource, char *dest_
     }
     scaleTable();
     WriteHeader(inpFile);
-    exit(0);
     ul high = (1L << PRECISION) - 1;
     ul low = 0;
 
@@ -119,7 +119,7 @@ void staticCompression(char *source_filename, int permissionsSource, char *dest_
     // updateFlow(&low, &high, inpFile);
     // fprintf(stderr, "Hello world\n");
     // fflush(stderr);
-    
+
     flush(inpFile);
     closeFile(inpFile);
 }
