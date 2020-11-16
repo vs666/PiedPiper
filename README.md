@@ -67,9 +67,9 @@ This is a project extension for the Algorithms course by team `Pied Piper`. It's
 
 ### Start
 
-> READ the README
-> READ the Coding Guidelines
-> Code
+> READ the README   
+> READ the Coding Guidelines    
+> Code  
 > Write name in Contributors.md file
 
 ### How to update forked repository
