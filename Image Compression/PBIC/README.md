@@ -124,6 +124,8 @@ We compressed a `Picture` and we would see the quality degradation before and af
 
 ![Real Image](https://github.com/vs666/PiedPiper/blob/master/Image%20Compression/PBIC/image.jpg)
 
+> After Compression
+
 ![Compressed Image](https://github.com/vs666/PiedPiper/blob/master/Image%20Compression/PBIC/compressed_image.jpg)
 
 
