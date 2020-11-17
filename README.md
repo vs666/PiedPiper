@@ -50,16 +50,21 @@ This is a project extension for the Algorithms course by team `Pied Piper`. It's
 1. Ashwin Mittal 
 2. Varul Srivastava 
 
-## Audio Compression 
-### Theoretical Analysis 
+## Theoretical Analysis 
+
+### Audio Compression 
+1. Zishan Kazi 
+2. Keshav Bansal
+
+### Video Compression
 1. Shivang Gupta 
 2. Akshett Jindal 
-3. Zishan Kazi 
-4. Keshav Bansal
 
-## Analysis of Cellular Automaton Transforms 
+### Cellular Automaton Transforms 
 1. Varul Srivastava
 
+## SSH-Type protocol based on Elementary CA-Encryption
+1. Varul Srivastava
 
 
 
