@@ -63,9 +63,11 @@ This is a project extension for the Algorithms course by team `Pied Piper`. It's
 ### Cellular Automaton Transforms 
 1. Varul Srivastava
 
-## SSH-Type protocol based on Elementary CA-Encryption
+# Implementation
+### SSH-Type protocol based on Elementary CA-Encryption
 1. Varul Srivastava
-
+### SHA-512 optimized using Cell Automation
+1. Varul Srivastava
 
 
 # Instructions 
