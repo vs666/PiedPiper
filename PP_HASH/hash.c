@@ -4,6 +4,7 @@
 
 #define MAX_LONG ((((1UL << 63) - 1) << 1) + 1)
 typedef unsigned long ul;
+#define RULE 30
 
 ul W[80];
 ul h[8] = {0x6a09e667f3bcc908, 0xbb67ae8584caa73b, 0x3c6ef372fe94f82b, 0xa54ff53a5f1d36f1,
@@ -65,12 +66,28 @@ ul overflow_addition(ul a, ul b)
     return ((a + b) % MAX_LONG);
 }
 
+ul cell_automaton(ul a, ul b, ul c)
+{
+    ul rv = 0;
+    int x = 0;
+    while (x < 64)
+    {
+        int num = ((a & 1) << 2) | ((b & 1) << 1) | (c & 1);
+        rv |= (((RULE >> num) & 1) << x);
+        a >>= 1;
+        b >>= 1;
+        c >>= 1;
+        x++;
+    }
+    return rv;
+}
+
 ul *round(ul *ar, int x) // return x and y as 2-D array
 {
-    ul mixer_1 = overflow_addition(majority(ar[0], ar[1], ar[2]), rot_function1(ar[0]));
-    ul mixer_2 = overflow_addition(overflow_addition(conditional(ar[4], ar[5], ar[6]), rot_function2(ar[4])), overflow_addition(overflow_addition(ar[7], W[x]), K[x]));
+
+    ul mixer_2 = cell_automaton(conditional(ar[4], ar[5], ar[6]), rot_function2(ar[4]), cell_automaton(ar[7], W[x], K[x]));
     ul *ar2 = (ul *)malloc(2 * sizeof(ul));
-    ar2[0] = overflow_addition(mixer_1, mixer_2);
+    ar2[0] = cell_automaton(majority(ar[0], ar[1], ar[2]), rot_function1(ar[0]), mixer_2);
     ar2[1] = overflow_addition(mixer_2, ar[3]);
     // printf(" Round %d   X : %lx  Y : %lx\n", x, ar2[0], ar2[1]);
     ar[7] = ar[6];
