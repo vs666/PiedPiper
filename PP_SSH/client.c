@@ -13,15 +13,21 @@
 int readAck(socket_conn *con)
 {
     // code here
-    int rl = 0;
+    // int rl = 0;
 
-    do
-    {
+    // do
+    // {
         char *ack = (char *)calloc(100, 1);
         read(con->sockfd, ack, 100);
-        rl = strlen(ack);
-        free(ack);
-    } while (rl == 0);
+    //     rl = strlen(ack);
+    //     if (strlen(ack) != 0)
+    //     {
+    //         printf("Recieved acknowledgement\n");
+    //         free(ack);
+    //         return 0;
+    //     }
+    //     free(ack);
+    // } while (rl == 0);
     return 0;
 }
 
@@ -111,19 +117,25 @@ void send_command(char *command, socket_conn *con)
 {
     // add decryption function here
     encryptFunction(command);
-    showHex(command);
+    // showHex(command);
     send(con->sockfd, command, strlen(command), 0); // client sends command as string
     readAck(con);                                   // client recieves the acknowledgement from the server for command received
-
-    sendAck(con); // sends acknowledgement to server that it is ready to accept output
-
+    sendAck(con);                                   // sends acknowledgement to server that it is ready to accept output
+    // printf("Sent acknowledgement\n");
     char *op_command = (char *)calloc(MINLEN * 5, 1); // = (char *)calloc(MINLEN * 5, 1); // max size of output is minlen*5 (arbritrary)
     int rl = 0;
     rl = read(con->sockfd, op_command, MINLEN * 5); // client reads command response
-    showHex(op_command);
+    // showHex(op_command);
     encryptFunction(op_command);
-    printf("response is :: %s", op_command); // display the command
-    printf("\n");
+    if (op_command[0] == 'B' && op_command[1] == 'Y' && op_command[2]== 'E')
+    {
+        // exit sequence
+        printf("Close connection message recieved.\n");
+        sendAck(con);
+        exit(0);
+    }
+    printf("%s", op_command); // display the command
+    // printf("\n");
     free(op_command);
 
     sendAck(con); // sends acknowledgement for command recieved
@@ -147,12 +159,6 @@ flag:
     {
         goto flag;
     }
-}
-
-void assertCommand(int argc, char *argv[])
-{
-    printf("IP : %s \nPORT : %s \n", argv[1], argv[2]);
-    // code here
 }
 
 char *trimString(char *str)
@@ -182,10 +188,38 @@ char *trimString(char *str)
     return ret;
 }
 
-int main(int argc, char *argv[]) // command :: ./client <ip> <port>
+void assertCommand(int argc, char *argv[])
 {
+    // printf("IP : %s \nPORT : %s \n", argv[1], argv[2]);
+    // code here
+    if (argc != 3)
+    {
+        printf("Invalid Command.\nUsage ::\n./client [IP_ADDR] [PORT_NUM]\n");
+        exit(0);
+    }
     argv[1] = trimString(argv[1]);
     argv[2] = trimString(argv[2]);
+    int n = atoi(argv[2]);
+    if (n > 65535 || n < 0)
+    {
+        printf("Invalid port number\n");
+        exit(0);
+    }
+    int cd = 0;
+    for (int x = 0; x < strlen(argv[1]); x++)
+    {
+        if (argv[1][x] == '.')
+            cd++;
+    }
+    if (cd != 3)
+    {
+        printf("Invalid IP address\n");
+        exit(0);
+    }
+}
+
+int main(int argc, char *argv[]) // command :: ./client <ip> <port>
+{
     assertCommand(argc, argv);
     socket_conn *con = make_connection(argv[1], argv[2]);
     if (con == NULL)
@@ -206,7 +240,7 @@ int main(int argc, char *argv[]) // command :: ./client <ip> <port>
         char *command = (char *)calloc(MINLEN, 0);
         getline(&command, &s, stdin);
         command = trimString(command);
-        printf("Command is %s\n", command);
+        // printf("Command is %s\n", command);
         send_command(command, con);
         readAck(con); // recieved acknowledgement for command completion
         free(command);

@@ -73,25 +73,27 @@ int strcompare(char *s1, char *s2)
 
 void recAck(int fd)
 {
-    int rl = 0;
+    // int rl = 0;
 
-    do
-    {
-        char *ack = (char *)calloc(100, 1);
-        read(fd, ack, 100);
-        rl = strlen(ack);
-        if (rl != 0)
-        {
-            printf("[DEBUG]Ack recieved :: %s\n", ack);
-        }
-        free(ack);
-    } while (rl == 0);
+    // do
+    // {
+    char *ack = (char *)calloc(100, 1);
+    read(fd, ack, 100);
+    //     rl = strlen(ack);
+    //     if (strlen(ack) != 0)
+    //     {
+    // printf("Recieved acknowledgement\n");
+    //         free(ack);
+    //         return;
+    //     }
+    //     free(ack);
+    // } while (rl == 0);
 }
 
 void sendAck(int fd)
 {
     send(fd, "ack", 3, 0);
-    printf("Acknowledgement sent to client.\n");
+    // printf("Sent acknowledgement\n");
 }
 
 char *trimString(char *str)
@@ -121,36 +123,65 @@ char *trimString(char *str)
     return ret;
 }
 
-int understand(char *msg, int new_socket)
+int understand(char *msg, int new_socket, int c_name)
 {
+    char fn[13] = {' ', '>', ' ', 't', 'm', 'p', '_', ('0' + c_name), '.', 't', 'x', 't'};
+    // char *rmc = (char *)calloc(MINLEN, 1);
+    char rmc[20] = "rm -rf tmp_0.txt";
+    rmc[11] = '0' + c_name;
+    // printf("c_name is : %d %s %s\n", c_name, fn, rmc);
+    // fflush(stdout);
+
     recAck(new_socket); // ready to accept new message
+    if (strcompare("exit", msg))
+    {
+        printf("Exit Command\n");
+        // fflush(stdout);
+        // exit the function
+        char ss[3] = "BYE";
+        encryptFunction(ss);
+        send(new_socket, ss, 3, 0);
+        return 1;
+    }
     char *str = (char *)calloc(MINLEN * 5, 1);
-    strcat(msg, " > tmpop.txt");
-    printf("\nCommand sent to system :: %s \n\n", msg);
+    // strcat(rmc, &(fn[3]));
+    // printf("Filename : %s\nRemove command is %s\nClient is %d\n", fn, rmc, c_name);
+    // fflush(stdout);
+    strcat(msg, fn);
+    // printf("Command is %s", msg);
     system(msg);
-    int fd1 = open("tmpop.txt", O_RDWR | __O_LARGEFILE | O_CREAT, 0666);
+    int fd1 = open(&(fn[3]), O_RDWR | __O_LARGEFILE | O_CREAT, 0666);
     if (fd1 < 0)
     {
+        printf("Invalid file error\n");
         char ss[3] = "INV";
         encryptFunction(ss);
-        showHex(ss);
         send(new_socket, ss, 3, 0);
         return 0;
     }
     int rl = 1;
     rl = read(fd1, str, MINLEN * 5);
-    // printf("[ debug ] %s is str,ms is %s\n", str, msg);
+    printf("[ debug ] %s is str,ms is %s\n", str, msg);
     // encrypt
+    if (rl == 0)
+    {
+        printf("Empty Command\n");
+        char ss[3] = "EOP"; // empty output
+        encryptFunction(ss);
+        send(new_socket, ss, 3, 0);
+        system(rmc);
+        recAck(new_socket); // receives acknowledgement from client for command completed
+        return 0;
+    }
     encryptFunction(str);
-    showHex(str);
+    // showHex(str);
     send(new_socket, str, rl, 0); // sends command response
 
-    printf("[ debug ] command response sent to client is %s\n", str);
     if (str != NULL)
         free(str);      // ERROR HERE
     recAck(new_socket); // receives acknowledgement from client for command completed
     close(fd1);
-    system("rm -rf tmpop.txt ");
+    system(rmc);
     return 0;
 }
 
@@ -229,14 +260,16 @@ int main(int argc, char const *argv[])
             {
                 char *buffer = (char *)calloc(1024, 0);
                 valread = read(new_socket, buffer, 1024); // accepts the command
-                showHex(buffer);
+                // showHex(buffer);
                 encryptFunction(buffer);
+                printf("Command is %s\n", buffer);
                 sendAck(new_socket); // sends acknowledgement for command recieved
                 // no need to trim string
 
-                if (understand(buffer, new_socket)) // interpret the command
+                if (understand(buffer, new_socket, counter)) // interpret the command
                 {
-                    break; // in case of exit
+                    sendAck(new_socket); // sends acknowledgement for command
+                    break;               // in case of exit
                 }
                 free(buffer);
                 sendAck(new_socket); // send acknowledgement for command completed
