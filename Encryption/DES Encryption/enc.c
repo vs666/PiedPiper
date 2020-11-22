@@ -1,4 +1,9 @@
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include<stdlib.h>
+#include<unistd.h>
  
 // change key if required
 int Original_key [64] = { 
@@ -307,9 +312,19 @@ void Encrypt_each_64_bit (int plain_bits [])
 			cipher_text[i] = Left32[16][i - 32];
 		finalPermutation(i, cipher_text[i]);
 	}
+	int fd2=open("out.txt",O_RDWR|O_APPEND);
+	char tobewrit[64];
+	for(int i=0;i<64;i++)
+	{
+        if(encrypted_text[i]==0)
+        	{tobewrit[i]='0';}
+        else
+        	{tobewrit[i]='1';}
+	}
+     write(fd2,tobewrit,64);
+ 	//  for (int i = 0; i < 64; i++)
+ 	// printf("%d", encrypted_text[i]);
  
-	for (int i = 0; i < 64; i++)
-		printf("%d", encrypted_text[i]);
 }
  
  
@@ -388,9 +403,16 @@ void key64to48(int key[])
 			key56to48(j, i, CD[j][i]);
 }
  
-int main(){
-	char plain_text[] = "a";
-	convert_Text_to_bits(plain_text);
+int main(int argc, char *argv[]){
+	char buffer[1000002];
+	int fd=open(argv[1],O_RDONLY);
+	if(fd<0)
+		{printf("error while opening file\n");return 0; }
+	int fd2=open("out.txt",O_CREAT|O_TRUNC|O_RDWR,0777);
+	close(fd2);
+     read(fd,buffer,1000000);
+
+	convert_Text_to_bits(buffer);
 	key64to48(Original_key); 
 	int _64bit_sets = bits_size/64;
 	printf("Encrypted output is:\n");
