@@ -1,6 +1,7 @@
 #include <stdio.h>
  
-int Original_key [64] = { // you can change key if required
+// change key if required
+int Original_key [64] = { 
 	0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0,
 	0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0, 1,
 	1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 0,
@@ -29,7 +30,7 @@ int Permutated_Choice2[48] = {
 	  46, 42, 50, 36, 29, 32
 };
  
-int Iintial_Permutation [64] = {
+int Initial_Permutation [64] = {
 	  58, 50, 42, 34, 26, 18, 10, 2,
 	  60, 52, 44, 36, 28, 20, 12, 4,
 	  62, 54, 46, 38, 30, 22, 14, 6,
@@ -150,7 +151,7 @@ int XORtext[48];
 int X[8][6];
 int X2[32];
 int R[32];
-int chiper_text[64];
+int cipher_text[64];
 int encrypted_text[64];
  
 int XOR(int a, int b) {
@@ -281,28 +282,30 @@ void Encrypt_each_64_bit (int plain_bits [])
 {
 	int IP_result [64] , index=0;
 	for (int i = 0; i < 64; i++) {
-		IP_result [i] = plain_bits[ Iintial_Permutation[i] ];
+		IP_result [i] = plain_bits[ Initial_Permutation[i] ];
 	}
 	for (int i = 0; i < 32; i++)
 		Left32[0][i] = IP_result[i];
 	for (int i = 32; i < 64; i++)
 		Right32[0][i - 32] = IP_result[i];
  
-	for (int k = 1; k < 17; k++) 
-	{ // processing through all 16 rounds
+ 	// 16 rounds
+	for (int k = 1; k <= 16; k++) 
+	{ 
 		cipher(k, 0);
  
 		for (int i = 0; i < 32; i++)
-			Left32[k][i] = Right32[k - 1][i]; // right part comes as it is to next round left part
+			Left32[k][i] = Right32[k - 1][i]; // next round left part = right part 
 	}
  
+	// 32bit swap as well as Final Inverse Permutation
 	for (int i = 0; i < 64; i++) 
-	{ // 32bit swap as well as Final Inverse Permutation
+	{ 
 		if (i < 32)
-			chiper_text[i] = Right32[16][i];
+			cipher_text[i] = Right32[16][i];
 		else
-			chiper_text[i] = Left32[16][i - 32];
-		finalPermutation(i, chiper_text[i]);
+			cipher_text[i] = Left32[16][i - 32];
+		finalPermutation(i, cipher_text[i]);
 	}
  
 	for (int i = 0; i < 64; i++)
@@ -335,6 +338,7 @@ int key64to56(int pos, int bit)
 	_56bit_key[i] = bit;
 }
  
+// creates keys for all rounds
 void key64to48(int key[])
 {
 	int k, backup[17][2];
@@ -387,9 +391,9 @@ void key64to48(int key[])
 int main(){
 	char plain_text[] = "a";
 	convert_Text_to_bits(plain_text);
-	key64to48(Original_key); // it creates all keys for all rounds
+	key64to48(Original_key); 
 	int _64bit_sets = bits_size/64;
-	printf("Decrypted output is\n");
+	printf("Encrypted output is:\n");
 	for(int i=0;i<= _64bit_sets ;i++) {
 		Encrypt_each_64_bit (text_to_bits + 64*i);
 	}
