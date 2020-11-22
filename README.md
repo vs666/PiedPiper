@@ -50,7 +50,14 @@ This is a project extension for the Algorithms course by team `Pied Piper`. It's
 1. Ashwin Mittal 
 2. Varul Srivastava 
 
-## Theoretical Analysis 
+## Theoretical Analysis
+
+### Image Compression
+1. Ashwin Mittal
+2. Varul Srivastava
+
+### Principal Component Analysis
+1. Ashwin Mittal
 
 ### Audio Compression 
 1. Zishan Kazi 
