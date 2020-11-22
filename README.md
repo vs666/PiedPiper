@@ -67,7 +67,7 @@ This is a project extension for the Algorithms course by team `Pied Piper`. It's
 1. Shivang Gupta 
 2. Akshett Jindal 
 
-### Cellular Automaton Transforms 
+### Cellular Automaton and Universal Computer
 1. Varul Srivastava
 
 ## Implementation
