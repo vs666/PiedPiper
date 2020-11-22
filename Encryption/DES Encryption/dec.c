@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include<stdlib.h>
 #include<unistd.h>
+#include<math.h>
  
 // change key if required
 int Original_key [64] = { 
@@ -158,6 +159,18 @@ int X2[32];
 int R[32];
 int cipher_text[64];
 int encrypted_text[64];
+
+char* convert_bits_to_Text(char *tobewrit){
+    char *final = malloc(8);
+	for(int i=0;i<64;i+=8)
+    {
+        int value = 0;
+        for (int j = 7; j >= 0; j--)
+            value += (int)pow(2, j) * tobewrit[i + 7 - j];
+        final[i/8] = (char)value;
+	}
+    return final;
+}
  
 int XOR(int a, int b) {
 	return (a ^ b);
@@ -283,8 +296,8 @@ void finalPermutation(int pos, int bit)
 			break;
 	encrypted_text[i] = bit;
 }
- 
-void Encrypt_each_64_bit (int plain_bits [])
+
+void Decrypt_each_64_bit (int plain_bits [])
 {
 	int IP_result [64] , index=0;
 	for (int i = 0; i < 64; i++) {
@@ -298,7 +311,7 @@ void Encrypt_each_64_bit (int plain_bits [])
  	// 16 rounds
 	for (int k = 1; k <= 16; k++) 
 	{ 
-		cipher(k, 0);
+		cipher(k, 1);
  
 		for (int i = 0; i < 32; i++)
 			Left32[k][i] = Right32[k - 1][i]; // next round left part = right part 
@@ -313,7 +326,7 @@ void Encrypt_each_64_bit (int plain_bits [])
 			cipher_text[i] = Left32[16][i - 32];
 		finalPermutation(i, cipher_text[i]);
 	}
-	int fd2=open("out.txt",O_RDWR|O_APPEND);
+    int fd2=open("out2.txt",O_RDWR|O_APPEND);
 	char tobewrit[64];
 	for(int i=0;i<64;i++)
 	{
@@ -322,18 +335,10 @@ void Encrypt_each_64_bit (int plain_bits [])
         else
         	{tobewrit[i]='1';}
 	}
-     write(fd2,tobewrit,64);
- 	//  for (int i = 0; i < 64; i++)
- 	// printf("%d", encrypted_text[i]);
- 
-}
- 
- 
-void convert_Text_to_bits(char *plain_text){
-	for(int i=0;plain_text[i];i++){
-		int asci = plain_text[i];
-		Dec_to_Binary(asci);
-	}
+    char *decrypted_string = malloc(8);
+    decrypted_string = convert_bits_to_Text(tobewrit);
+    write(fd2,decrypted_string,8);
+
 }
  
 void key56to48(int round, int pos, int bit)
@@ -342,7 +347,8 @@ void key56to48(int round, int pos, int bit)
 	for (i = 0; i < 56; i++)
 		if (Permutated_Choice2[i] == pos + 1)
 			break;
-	_48bit_key[round][i] = bit;
+    if (i<48)
+	    _48bit_key[round][i] = bit;
 }
  
 int key64to56(int pos, int bit)
@@ -351,6 +357,7 @@ int key64to56(int pos, int bit)
 	for (i = 0; i < 56; i++)
 		if (Permutated_Choice1[i] == pos + 1)
 			break;
+    if (i<56)
 	_56bit_key[i] = bit;
 }
  
@@ -405,20 +412,35 @@ void key64to48(int key[])
 }
  
 int main(int argc, char *argv[]){
+    if (argc != 2)
+    {
+        fprintf(stderr,"Usage: ./dec <filenam>");
+        return 1;
+    }
+    
 	char buffer[1000002];
 	int fd=open(argv[1],O_RDONLY);
 	if(fd<0)
-		{printf("error while opening file\n");return 0; }
-	int fd2=open("out.txt",O_CREAT|O_TRUNC|O_RDWR,0777);
+	{
+        printf("error while opening file\n");
+        return 0; 
+    }
+	int fd2=open("out2.txt",O_CREAT|O_TRUNC|O_RDWR,0777);
 	close(fd2);
-     read(fd,buffer,1000000);
 
-	convert_Text_to_bits(buffer);
+    int ret = read(fd,buffer,1000000);
+
 	key64to48(Original_key); 
-	int _64bit_sets = bits_size/64;
-	printf("Encrypted output is:\n");
-	for(int i=0;i<= _64bit_sets ;i++) {
-		Encrypt_each_64_bit (text_to_bits + 64*i);
+	int _64bit_sets = ret/64;
+	printf("Decrypted output is:\n");
+	for(int i=0; i<= _64bit_sets; i++) {
+        int int_buffer[64];
+        for (int j = 0; j < 64; j++)
+        {
+            int_buffer[j] = buffer[i*64 + j]-'0';
+        }
+         
+		Decrypt_each_64_bit (int_buffer);
 	}
 	return 0;
 }
