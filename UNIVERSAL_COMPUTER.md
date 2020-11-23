@@ -22,7 +22,7 @@ This is a corollary of the halting problem: the problem of determining whether a
 ## Solving the Halting Problem
 
 `HYPOTHESIS` : The Game of Life had a deciding algorithm D that can predict its future states.
-Since the Game of Life consists a pattern equivalent to universal turing machine, this deciding algorithm D can be used to solve the halting problem by taking `initial pattern` as one UTM and an input, and decide if halting will occour or not.
+Since the Game of Life consists a pattern equivalent to universal turing machine, this deciding algorithm D can be used to solve the halting problem by taking `initial pattern` as one UTM and an input, and decide if halting will occour or not. 
 `RESULTS` :     
 1. It thus follows that any Deciding algorithm D doesnot exist.
 2. It also follows that some patterns exist that remain chaotic forever. If this were not the case, one could progress the game sequentially until a non-chaotic pattern emerged, then compute whether a later pattern was going to appear. 
