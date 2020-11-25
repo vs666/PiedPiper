@@ -75,8 +75,11 @@ This is a project extension for the Algorithms course by team `Pied Piper`. It's
 ### SSH-Type protocol based on Elementary CA-Encryption
 1. Varul Srivastava
 ### SHA-512 optimized using Cell Automation
+1. Varul Srivastava 
+### Forest_Fire Simulation
 1. Varul Srivastava
-
+### Multi Agent Collision Avoidance 
+1. Varul Srivastava 
 
 # Instructions 
 
