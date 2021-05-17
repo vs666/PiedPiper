@@ -1,0 +1,88 @@
+INITIAL CONDITION 
+V           X 
+    X X       
+    X X   X   
+              
+X X X     X X 
+          X X 
+    X X       
+ITER 1
+            X 
+  V X X       
+    X X   X   
+              
+X X X     X X 
+          X X 
+    X X       
+ITER 2
+            X 
+    X X       
+  V X X   X   
+              
+X X X     X X 
+          X X 
+    X X       
+ITER 3
+            X 
+    X X       
+    X X   X   
+  V           
+X X X     X X 
+          X X 
+    X X       
+ITER 4
+            X 
+    X X       
+    X X   X   
+    V         
+X X X     X X 
+          X X 
+    X X       
+ITER 5
+            X 
+    X X       
+    X X   X   
+      V       
+X X X     X X 
+          X X 
+    X X       
+ITER 6
+            X 
+    X X       
+    X X   X   
+              
+X X X   V X X 
+          X X 
+    X X       
+ITER 7
+            X 
+    X X       
+    X X   X   
+              
+X X X     X X 
+        V X X 
+    X X       
+ITER 8
+            X 
+    X X       
+    X X   X   
+              
+X X X     X X 
+          X X 
+    X X V     
+ITER 9
+            X 
+    X X       
+    X X   X   
+              
+X X X     X X 
+          X X 
+    X X   V   
+ITER 10
+            X 
+    X X       
+    X X   X   
+              
+X X X     X X 
+          X X 
+    X X     V 
